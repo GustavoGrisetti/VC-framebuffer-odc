@@ -1,19 +1,9 @@
-.ifndef utils_s
-.equ utils_s, 0
-
 .include "data.s"
-.include "figures.s"
 
-/* rejilla de arriba */
-/* posición inicial x1 */
-
-
-/* tres hojas */
-makeSheets:
-
-// leaf_cross:
-
-
-
-
-.endif
+timer:
+	mov x5, 25471
+loop_timer:
+	sub x5, x5, 1
+	cbnz x5, loop_timer
+	b timer
+br x30
