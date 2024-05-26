@@ -1,0 +1,87 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD app.o
+LOAD background.o
+LOAD data.o
+LOAD figures.o
+LOAD start.o
+LOAD utils.o
+                0x0000000000080000                . = 0x80000
+
+.text           0x0000000000080000    0x900c8
+ *(.text.boot)
+ .text.boot     0x0000000000080000    0x100c8 start.o
+                0x0000000000080000                _start
+ *(.text*)
+ .text          0x00000000000900c8        0x0 app.o
+ .text          0x00000000000900c8        0x0 background.o
+ .text          0x00000000000900c8        0x0 data.o
+ .text          0x00000000000900c8        0x0 figures.o
+ .text          0x00000000000900c8    0x80000 start.o
+ .text          0x00000000001100c8        0x0 utils.o
+
+.iplt           0x00000000001100c8        0x0
+ .iplt          0x00000000001100c8        0x0 app.o
+
+.rela.dyn       0x00000000001100c8        0x0
+ .rela.iplt     0x00000000001100c8        0x0 app.o
+ .rela.text.boot
+                0x00000000001100c8        0x0 app.o
+
+.data           0x00000000001100c8     0x1504
+ .data          0x00000000001100c8       0x28 app.o
+                0x00000000001100e0                main
+ .data          0x00000000001100f0     0x13f4 background.o
+                0x00000000001100f4                makeBackground
+ .data          0x00000000001114e4        0x4 data.o
+ .data          0x00000000001114e8       0xcc figures.o
+                0x00000000001114ec                drawRectangle
+                0x0000000000111534                drawCircle
+ .data          0x00000000001115b4        0x0 start.o
+ .data          0x00000000001115b4       0x18 utils.o
+
+.igot.plt       0x00000000001115d0        0x0
+ .igot.plt      0x00000000001115d0        0x0 app.o
+
+.bss            0x00000000001115cc        0x0
+ *(.bss*)
+ .bss           0x00000000001115cc        0x0 app.o
+ .bss           0x00000000001115cc        0x0 background.o
+ .bss           0x00000000001115cc        0x0 data.o
+ .bss           0x00000000001115cc        0x0 figures.o
+ .bss           0x00000000001115cc        0x0 start.o
+ .bss           0x00000000001115cc        0x0 utils.o
+
+.bss            0x00000000001115cc        0x4
+                0x00000000001115d0                . = ALIGN (0x10)
+ *fill*         0x00000000001115cc        0x4 
+                0x00000000001115d0                __bss_start = .
+ *(.bss .bss.*)
+ *(COMMON)
+                0x00000000001115d0                __bss_end = .
+                0x00000000001115d0                _end = .
+                0x0000000000000000                __bss_size = ((__bss_end - __bss_start) >> 0x3)
+OUTPUT(kernel8.elf elf64-littleaarch64)
+LOAD linker stubs
+
+.debug_line     0x0000000000000000       0x53
+ .debug_line    0x0000000000000000       0x53 start.o
+
+.debug_info     0x0000000000000000       0x2e
+ .debug_info    0x0000000000000000       0x2e start.o
+
+.debug_abbrev   0x0000000000000000       0x14
+ .debug_abbrev  0x0000000000000000       0x14 start.o
+
+.debug_aranges  0x0000000000000000       0x30
+ .debug_aranges
+                0x0000000000000000       0x30 start.o
+
+.debug_str      0x0000000000000000       0x5e
+ .debug_str     0x0000000000000000       0x5e start.o
