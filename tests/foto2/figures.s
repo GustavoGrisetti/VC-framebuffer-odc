@@ -1,9 +1,10 @@
-.ifndef figures_s
-.equ figures_s, 0
-
 .include "data.s"
 
+.global drawRectangle
 drawRectangle:
+    sub sp, sp, 8   // mueve en 8 el puntero 'sp'
+	str x30, [sp]   // guarda la dirección de 'ret' en 'sp-8'
+
     rows: //x5 = x20 +  4*[X + (Y*640)]
         mov x11, SCREEN_WIDTH   	 // x11 -> 640
         mul x11, x2, x11   		     // x11 -> Y * 640
@@ -19,9 +20,16 @@ drawRectangle:
         add x2, x2, 1   			     // suma 1 al dato de las filas
         sub x4, x4, 1   				 // resta 1 al alto del rectangulo
         cbnz x4, rows              		 // verifica cuando el alto llegue a 0 (termina la fila)
+
+	ldr x30, [sp]   // carga la dirección de 'ret' desde 'sp-8
+	add sp, sp, 8   // regresa en 8 el puntero 'sp'
     br x30
 
+.global drawCircle
 drawCircle:
+    sub sp, sp, 8   // mueve en 8 el puntero 'sp'
+	str x30, [sp]   // guarda la dirección de 'ret' en 'sp-8'
+
     // Calcula la posicion de la esquina superior izquierda
     sub x11, x2, x3                 // x11 = Y-r
     sub x12, x1, x3                 // x12 = X-r
@@ -55,6 +63,7 @@ drawCircle:
         add x11, x11, 1
         cmp x11, x13
         b.le c_rows
-    br x30
 
-.endif
+	ldr x30, [sp]   // carga la dirección de 'ret' desde 'sp-8
+	add sp, sp, 8   // regresa en 8 el puntero 'sp'
+    br x30
